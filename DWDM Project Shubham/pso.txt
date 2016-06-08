@@ -1,0 +1,67 @@
+Basic PSO
+
+The Social Metaphor
+
+The Particle Swarm Optimization algorithm (described in [1]) is a biologically-inspired algorithm motivated by a social analogy. Sometimes it is related to the Evolutionary Computation (EC) techniques, basically with Genetic Algorithms (GA) and Evolutionary Strategies (ES), but there are significant differences with those techniques.
+
+The PSO algorithm is population-based: a set of potential solutions evolves to approach a convenient solution (or set of solutions) for a problem. Being an optimization method, the aim is finding the global optimum of a real-valued function (fitness function) defined in a given space (search space).
+
+The social metaphor that led to this algorithm can be summarized as follows: the individuals that are part of a society hold an opinion that is part of a "belief space" (the search space) shared by every possible individual. Individuals may modify this "opinion state" based on three factors:
+
+The knowledge of the environment (its fitness value)
+The individual's previous history of states (its memory)
+The previous history of states of the individual's neighborhood
+An individual's neighborhood may be defined in several ways, configuring somehow the "social network" of the individual. Several neighborhood topologies exist (full, ring, star, etc.) depending on whether an individual interacts with all, some, or only one of the rest of the population.
+
+Following certain rules of interaction, the individuals in the population adapt their scheme of belief to the ones that are more successful among their social network. Over the time, a culture arises, in which the individuals hold opinions that are closely related.
+
+The Basic PSO Algorithm
+
+In the PSO algorithm each individual is called a "particle", and is subject to a movement in a multidimensional space that represents the belief space. Particles have memory, thus retaining part of their previous state. There is no restriction for particles to share the same point in belief space, but in any case their individuality is preserved. Each particle's movement is the composition of an initial random velocity and two randomly weighted influences: individuality, the tendency to return to the particle's best previous position, and sociality, the tendency to move towards the neighborhood's best previous position.
+
+The Continuous PSO
+
+There are two versions of the basic PSO algorithm. The "continuous" version uses a real-valued multidimensional space as belief space, and evolves the position of each particle in that space using the following equations: 
+\begin{displaymath}
+v^{t+1}_{id} = w \cdot v^{t}_{id} + c_1 \cdot \psi_1 \cdo...
+...-x^{t}_{id}) + c_2 \cdot \psi_2 \cdot (p^{t}_{gd}-x^{t}_{id})
+\end{displaymath}	(1)
+
+
+\begin{displaymath}
+x^{t+1}_{id} = x^{t}_{id} + v^{t+1}_{id}
+\end{displaymath}	(2)
+
+ $v^{t}_{id}$:	Component in dimension d of the $i^{th}$ particle velocity in iteration $t$.
+ $x^{t}_{id}$:	Component in dimension d of the $i^{th}$ particle position in iteration  $t$.
+ $c_1$ ,$c_2$:	Constant weight factors.
+ $p_i$:	Best position achieved so long by particle $i$.
+ $p_g$:	Best position found by the neighbors of particle $i$.
+ $\psi_1$ ,$\psi_2$:	Random factors in the [0,1] interval.
+ $w$:	Inertia weight.
+  
+The particle used to calculate   $p_g$ depends on the type of neighborhood selected. In the basic algorithm either a global (gbest) or local (lbest) neighborhood is used. In the global neighborhood, all the particles are considered when calculating   $p_g$. In the case of the local neighborhood, neighborhood is only composed by a certain number of particles among the whole population. The local neighborhood of a given particle does not change during the iteration of the algorithm.
+
+A constraint ($v_{max}$) is imposed on $v^{t}_{id}$ to ensure convergence. Its value is usually kept within the interval [$-x^{max}_{id}$,$x^{max}_{id}$], being $x^{max}_{id}$ the maximum value for the particle position [6]. A large inertia weight ($w$) favors global search, while a small inertia weight favors local search. If inertia is used, it is sometimes decreased linearly during the iteration of the algorithm, starting at an initial value close to $1$ [6,7]. An alternative formulation of Eq. 1 adds a constriction coefficient that replaces the velocity constraint ($v_{max}$) [3]. The PSO algorithm requires tuning of some parameters: the individual and sociality weights ($c_1$ ,$c_2$), and the inertia factor ($w$). Both theoretical and empirical studies are available to help in selection of proper values [1,3,4,5,6,7].
+
+The Binary PSO
+
+A binary PSO algorithm has been developed in [1,8]. This version has attracted much lesser attention in previous work. In the binary version, the particle position is not a real value, but either the binary $0$ or $1$. The logistic function of the particle velocity is used as the probability distribution for the position, that is, the particle position in a dimension is randomly generated using that distribution. The equation that updates the particle position becomes the following: 
+\begin{displaymath}
+x^{t+1}_{id} = \left\{
+\begin{array}{ll}
+1 & if\ \psi_3...
+...{-v^{t+1}_{id}}} \\
+0 & otherwise \\
+\end{array}
+\right.
+\end{displaymath}	(3)
+
+ $v^{t}_{id}$:	Component in dimension d of the $i^{th}$ particle velocity in iteration $t$.
+ $x^{t+1}_{id}$:	Component in dimension d of the $i^{th}$ particle position in iteration  $t+1$.
+ $\psi_3$:	Random factor in the [0,1] interval.
+  
+This means that a binary PSO without individual and social influences ($c_1=c_2=0.0$) would still perform a random search on the space (the position in each dimension would have a $0.5$ chance of being a zero or one). The selection of parameters for the binary version of the PSO algorithm has not been a subject of deep study in known works. This binary PSO has not been widely studied and some issues are still open [9]. Some modifications on the binary algorithm equations propose a quantum approach [10]. A previous article [11] also addresses classification problems. Recently, Clerc [12] proposes and performs an analysis of alternative and more promising binary PSO algorithms.
+
+
+Copyright ©2005, University CARLOS III of Madrid
